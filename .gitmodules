@@ -1,0 +1,3 @@
+[submodule "deans-api"]
+	path = deans-api
+	url = https://github.com/Deans-CMS/deans-api
