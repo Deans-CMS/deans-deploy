@@ -1,0 +1,40 @@
+version: '3'
+
+networks:
+  nginx_network:
+    driver: bridge
+  db_network:
+    driver: bridge
+
+
+services:
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    networks: 
+      - db_network
+  web:
+    build:
+      context: ./deans-api
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./deans-api:/code
+    # ports:
+    #   - "8000:8000"
+    depends_on:
+      - db
+    networks: 
+      - db_network
+  nginx:
+    image: nginx:1.13
+    ports:
+      - 8000:80
+    volumes:
+      - ./nginx-config/conf.d:/etc/nginx/conf.d
+      # - static_volume:/opt/services/djangoapp/static  # <-- bind the static volume
+      # - media_volume:/opt/services/djangoapp/media  # <-- bind the media volume
+    depends_on:
+      - web
+    networks:
+      - nginx_network
