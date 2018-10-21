@@ -17,7 +17,7 @@ services:
   web:
     build:
       context: ./deans-api
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: ["gunicorn", "--chdir", "deans_api", "--bind", ":8000", "deans_api.wsgi:application"]
     volumes:
       - ./deans-api:/code
     # ports:
@@ -26,6 +26,7 @@ services:
       - db
     networks: 
       - db_network
+      - nginx_network
   nginx:
     image: nginx:1.13
     ports:
