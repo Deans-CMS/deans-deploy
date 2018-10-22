@@ -18,6 +18,7 @@ services:
     build:
       context: ./deans-api
     command:  bash -c "python manage.py collectstatic --no-input && gunicorn --chdir deans_api --bind :8000 deans_api.wsgi:application"
+    # command: bash -c "python manage.py collectstatic --no-input && python3 manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./deans-api:/code
       - static_volume:/static
@@ -36,7 +37,7 @@ services:
       - 8000:80
     volumes:
       - ./nginx-config/conf.d:/etc/nginx/conf.d
-      - static_volume:/code/deans_api/static
+      - static_volume:/static
     depends_on:
       - web
     networks:
