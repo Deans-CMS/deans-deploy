@@ -19,29 +19,30 @@ services:
   web:
     build:
       context: ./deans-api
-    # command: bash -c "python manage.py collectstatic --no-input && gunicorn --chdir deans_api --log-level=debug --bind :8000 deans_api.wsgi:application"
-    command: bash -c "python manage.py collectstatic --no-input; python3 manage.py makemigrations; python3 manage.py migrate; python3 manage.py runserver 0.0.0.0:8000"
+    image: django_image
+    entrypoint: "start_django.sh"
     env_file:
       - default.env
     volumes:
-      - ./deans-api:/code
-      - static_volume:/static
+      - ./deans-api/data:/data
+      - ./deans-api/deans_api:/work/deans-api/deans_api
+      - static_volume:/static-django
     expose:
       - 8000
-    # ports:
-    #   - "8000:8000"
     depends_on:
       - db
     networks: 
       - db_network
       - nginx_network
   nginx:
+    build:
+      context: ./nginx
     image: nginx:1.13
     ports:
       - 8000:80
     volumes:
-      - ./nginx-config/conf.d:/etc/nginx/conf.d
-      - static_volume:/static
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - static_volume:/static-django
     env_file:
       - default.env
     depends_on:
@@ -49,19 +50,26 @@ services:
     networks:
       - nginx_network
   cron:
-    build:
-      context: ./deans-api
+    image: django_image
     command: bash -c "python3 /cron/cron.py"
     env_file:
       - default.env
     volumes:
       - ./cron:/cron
-      - ./deans-api:/code
+      - ./deans-api/deans_api:/work/deans-api/deans_api
     depends_on:
       - web
     networks: 
       - db_network
-      - nginx_network
 
 volumes:
   static_volume:
+
+
+    # node:
+  #   build: ./deans-frontend
+  #   volumes:
+  #   #  - ./app:/src/app
+  #   ports:
+  #     - "3000"
+  #   command: npm start

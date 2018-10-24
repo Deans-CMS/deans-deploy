@@ -1,3 +1,6 @@
 [submodule "deans-api"]
 	path = deans-api
 	url = https://github.com/Deans-CMS/deans-api
+[submodule "deans-frontend"]
+	path = deans-frontend
+	url = https://github.com/Deans-CMS/deans-frontend
