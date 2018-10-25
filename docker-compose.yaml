@@ -27,12 +27,23 @@ services:
       - ./deans-api/data:/data
       - ./deans-api/deans_api:/work/deans-api/deans_api
       - static_volume:/static-django
-    expose:
-      - 8000
+    ports:
+      - "3000"
     depends_on:
       - db
     networks: 
       - db_network
+      - nginx_network
+  node:
+    build: ./deans-frontend
+    expose:
+      - 3000
+    volumes:
+     - ./deans-frontend:/work/
+    ports:
+      - "3000"
+    command: bash -c "yarn install; yarn start"
+    networks: 
       - nginx_network
   nginx:
     build:
@@ -47,6 +58,7 @@ services:
       - default.env
     depends_on:
       - web
+      - node
     networks:
       - nginx_network
   cron:
@@ -66,10 +78,3 @@ volumes:
   static_volume:
 
 
-    # node:
-  #   build: ./deans-frontend
-  #   volumes:
-  #   #  - ./app:/src/app
-  #   ports:
-  #     - "3000"
-  #   command: npm start
