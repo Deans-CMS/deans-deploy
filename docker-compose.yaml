@@ -34,17 +34,19 @@ services:
     networks: 
       - db_network
       - nginx_network
-  node:
-    build: ./deans-frontend
-    expose:
-      - 3000
-    volumes:
-     - ./deans-frontend:/work/
-    ports:
-      - "3000"
-    command: bash -c "yarn install; yarn start"
-    networks: 
-      - nginx_network
+  # node:
+  #   build: ./deans-frontend
+  #   ports:
+  #   - "3000:3000"
+  #   expose:
+  #     - 3000
+  #   volumes:
+  #    - ./deans-frontend:/work/
+  #   ports:
+  #     - "3000"
+  #   command: bash -c "yarn install; yarn start"
+  #   networks: 
+  #     - nginx_network
   nginx:
     build:
       context: ./nginx
@@ -58,7 +60,7 @@ services:
       - default.env
     depends_on:
       - web
-      - node
+      # - node
     networks:
       - nginx_network
   cron:
