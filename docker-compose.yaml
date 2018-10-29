@@ -5,6 +5,8 @@ networks:
     driver: bridge
   db_network:
     driver: bridge
+  notification_network:
+    driver: bridge
 
 
 services:
@@ -27,26 +29,26 @@ services:
       - ./deans-api/data:/data
       - ./deans-api/deans_api:/work/deans-api/deans_api
       - static_volume:/static-django
-    ports:
-      - "3000"
     depends_on:
       - db
     networks: 
       - db_network
       - nginx_network
-  # node:
-  #   build: ./deans-frontend
-  #   ports:
-  #   - "3000:3000"
-  #   expose:
-  #     - 3000
-  #   volumes:
-  #    - ./deans-frontend:/work/
-  #   ports:
-  #     - "3000"
-  #   command: bash -c "yarn install; yarn start"
-  #   networks: 
-  #     - nginx_network
+      - notification_network
+  notification:
+    build:
+      context: ./deans-notification
+    image: notification_image
+    entrypoint: "start_server.sh"
+    # command: "python -c \"while True: pass\""
+    # ports:
+    #   - "8000:3000"
+    env_file:
+      - default.env
+    volumes:
+      - ./deans-notification:/work
+    networks:
+      - notification_network
   nginx:
     build:
       context: ./nginx
@@ -73,10 +75,26 @@ services:
       - ./deans-api/deans_api:/work/deans-api/deans_api
     depends_on:
       - web
-    networks: 
+    networks:
+      - notification_network
       - db_network
 
 volumes:
   static_volume:
 
 
+
+
+      # node:
+  #   build: ./deans-frontend
+  #   ports:
+  #   - "3000:3000"
+  #   expose:
+  #     - 3000
+  #   volumes:
+  #    - ./deans-frontend:/work/
+  #   ports:
+  #     - "3000"
+  #   command: bash -c "yarn install; yarn start"
+  #   networks: 
+  #     - nginx_network
