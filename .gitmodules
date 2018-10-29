@@ -4,3 +4,6 @@
 [submodule "deans-frontend"]
 	path = deans-frontend
 	url = https://github.com/Deans-CMS/deans-frontend
+[submodule "deans-notification"]
+	path = deans-notification
+	url = https://github.com/Deans-CMS/deans-notification.git
