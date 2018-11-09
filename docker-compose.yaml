@@ -7,6 +7,8 @@ networks:
     driver: bridge
   notification_network:
     driver: bridge
+  # frontend_network:
+  #   driver: bridge
 
 
 services:
@@ -49,6 +51,14 @@ services:
       - ./deans-notification:/work
     networks:
       - notification_network
+  # frontend:
+  #   build:
+  #     context: ./deans-frontend
+  #   image: frontend_image
+  #   networks:
+  #     - frontend_network
+  #   ports:
+  #     - 3000:3000
   nginx:
     build:
       context: ./nginx
@@ -62,6 +72,7 @@ services:
       - default.env
     depends_on:
       - web
+      # - frontend
       # - node
     networks:
       - nginx_network
