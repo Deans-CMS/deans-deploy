@@ -76,19 +76,19 @@ services:
       # - node
     networks:
       - nginx_network
-  cron:
-    image: django_image
-    command: bash -c "python3 /cron/cron.py"
-    env_file:
-      - default.env
-    volumes:
-      - ./cron:/cron
-      - ./deans-api/deans_api:/work/deans-api/deans_api
-    depends_on:
-      - web
-    networks:
-      - notification_network
-      - db_network
+  # cron:
+  #   image: django_image
+  #   command: bash -c "python3 /cron/cron.py"
+  #   env_file:
+  #     - default.env
+  #   volumes:
+  #     - ./cron:/cron
+  #     - ./deans-api/deans_api:/work/deans-api/deans_api
+  #   depends_on:
+  #     - web
+  #   networks:
+  #     - notification_network
+  #     - db_network
 
 volumes:
   static_volume:
