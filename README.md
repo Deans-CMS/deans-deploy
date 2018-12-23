@@ -42,5 +42,5 @@ For easy development environment setup, Docker is used throughout the developmen
 
 1. Install `Docker` and `Yarn` on your computer.
 2. Go to project root directory and type the following command in terminal: ```docker-compose up --build```. This will launch the Core API System and Notification System.
-3. Go to `/deans-frontend directory` and type the following commands in terminal: ```yarn install```, ```yarn start```. This will launch the Web Client System.
+3. Go to `/deans-frontend` directory and type the following commands in terminal: ```yarn install```, ```yarn start```. This will launch the Web Client System.
 4. Go to `localhost:8000` and start exploring!
